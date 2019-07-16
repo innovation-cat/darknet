@@ -21,6 +21,7 @@ extern void run_go(int argc, char **argv);
 extern void run_art(int argc, char **argv);
 extern void run_super(int argc, char **argv);
 extern void run_lsd(int argc, char **argv);
+extern void run_webank_model(int argc, char **argv);
 
 void average(int argc, char *argv[])
 {
