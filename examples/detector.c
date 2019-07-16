@@ -514,7 +514,7 @@ void validate_detector_recall(char *datacfg, char *cfgfile, char *weightfile)
     int correct = 0;
     int proposals = 0;
     float avg_iou = 0;
-
+	float avg_recall = 0.0;
     for(i = 0; i < m; ++i){
         char *path = paths[i];
         image orig = load_image_color(path, 0, 0);
@@ -555,10 +555,14 @@ void validate_detector_recall(char *datacfg, char *cfgfile, char *weightfile)
         }
 
         fprintf(stderr, "%5d %5d %5d\tRPs/Img: %.2f\tIOU: %.2f%%\tRecall:%.2f%%\n", i, correct, total, (float)proposals/(i+1), avg_iou*100/total, 100.*correct/total);
+		avg_recall += (100.*correct/total);
         free(id);
         free_image(orig);
         free_image(sized);
     }
+	
+	if (m>0)printf("%.2f", avg_recall/m);
+	else printf("0.0");
 }
 
 void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh, char *outfile, int fullscreen)
