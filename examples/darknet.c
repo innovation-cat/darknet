@@ -398,6 +398,7 @@ void visualize(char *cfgfile, char *weightfile)
     visualize_network(net);
 }
 
+
 int main(int argc, char **argv)
 {
     //test_resize("data/bad.jpg");
@@ -415,6 +416,9 @@ int main(int argc, char **argv)
 #ifndef GPU
     gpu_index = -1;
 #else
+    if(gpu_num() < 0) {
+       gpu_index = -1;
+    }
     if(gpu_index >= 0){
         cuda_set_device(gpu_index);
     }

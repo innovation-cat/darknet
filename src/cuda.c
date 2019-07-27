@@ -8,6 +8,7 @@ int gpu_index = 0;
 #include <assert.h>
 #include <stdlib.h>
 #include <time.h>
+#include <cuda_runtime.h>
 
 void cuda_set_device(int n)
 {
@@ -172,6 +173,26 @@ float cuda_mag_array(float *x_gpu, size_t n)
     free(temp);
     return m;
 }
+
+int gpu_num() {
+    int device_count = 0;
+    auto const error = cudaGetDeviceCount(&device_count);
+    if (error != cudaSuccess) {
+      if (error == cudaErrorInsufficientDriver) {
+        return 0;
+      }
+
+      fprintf(stderr, "cudaGetDeviceCount failed %d %s,so we treat as no GPU:", error, cudaGetErrorString(error));
+      return 0;
+    }
+
+    if (device_count < 0) { 
+      fprintf(stderr, "invalid device_count %d,so we treat as no GPU", device_count)
+      return 0;
+    }
+    return device_count;
+}
+
 #else
 void cuda_set_device(int n){}
 
