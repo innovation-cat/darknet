@@ -176,7 +176,7 @@ float cuda_mag_array(float *x_gpu, size_t n)
 
 int gpu_num() {
     int device_count = 0;
-    auto const error = cudaGetDeviceCount(&device_count);
+    int const error = cudaGetDeviceCount(&device_count);
     if (error != cudaSuccess) {
       if (error == cudaErrorInsufficientDriver) {
         return 0;
@@ -187,7 +187,7 @@ int gpu_num() {
     }
 
     if (device_count < 0) { 
-      fprintf(stderr, "invalid device_count %d,so we treat as no GPU", device_count)
+      fprintf(stderr, "invalid device_count %d,so we treat as no GPU", device_count);
       return 0;
     }
     return device_count;
