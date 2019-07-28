@@ -5,6 +5,6 @@ RUN mkdir -p /opt/darknet
 RUN mkdir -p /opt/bin
 COPY . /opt/darknet
 WORKDIR /opt/darknet
-RUN sed -i -e 's/GPU=0/GPU=1/g' Makefile
+RUN sed -i -e '1s/GPU=0/GPU=1/g' Makefile
 RUN make -j8
 RUN cp darknet /opt/bin
