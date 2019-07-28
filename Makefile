@@ -47,12 +47,12 @@ COMMON+= `pkg-config --cflags opencv`
 endif
 
 ifeq ($(GPU), 1)
-$(shell nvidia-smi)
-ifneq ($(.SHELLSTATUS), 0)
+output=$(shell nvidia-smi -L)
+ifeq ($(findstring GPU,$(output)) ,"")
 override GPU=0
 $(warning "no nvidia-smi output,disable GPU")
 else
-$(info "nvidia-smi detected")
+$(warning "nvidia-smi detected")
 endif
 endif
 
