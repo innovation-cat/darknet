@@ -46,6 +46,14 @@ LDFLAGS+= `pkg-config --libs opencv` -lstdc++
 COMMON+= `pkg-config --cflags opencv` 
 endif
 
+ifeq ($(GPU), 1)
+  $(shell nvidia-smi)
+  ifeq ($(.SHELLSTATUS), 0)
+	GPU=0
+	@echo "no nvidia-smi output,disable GPU"
+  endif
+endif
+
 ifeq ($(GPU), 1) 
 COMMON+= -DGPU -I/usr/local/cuda/include/
 CFLAGS+= -DGPU
