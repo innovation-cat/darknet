@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(darknet LANGUAGES C CXX)
+project(darknet LANGUAGES C CXX CUDA)
 
 include(cmake/all.cmake)
 
@@ -51,6 +51,16 @@ ${CMAKE_CURRENT_SOURCE_DIR}/src/lstm_layer.c
 ${CMAKE_CURRENT_SOURCE_DIR}/src/l2norm_layer.c
 ${CMAKE_CURRENT_SOURCE_DIR}/src/yolo_layer.c
 ${CMAKE_CURRENT_SOURCE_DIR}/src/iseg_layer.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/activation_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/col2im_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/deconvolutional_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/maxpool_layer_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/avgpool_layer_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/convolutional_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/dropout_layer_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/blas_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/crop_layer_kernels.cu
+${CMAKE_CURRENT_SOURCE_DIR}/src/im2col_kernels.cu
 ${CMAKE_CURRENT_SOURCE_DIR}/examples/captcha.c
 ${CMAKE_CURRENT_SOURCE_DIR}/examples/lsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/examples/super.c
@@ -71,17 +81,20 @@ ${CMAKE_CURRENT_SOURCE_DIR}/examples/darknet.c
 ${CMAKE_CURRENT_SOURCE_DIR}/examples/webank.c
   )
 
-  if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
-  elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
-  endif()
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
+elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
+endif()
 
 add_executable(darknet ${SOURCE})
-find_package(OpenCV REQUIRED)
-target_compile_definitions(darknet PRIVATE OPENCV)
+find_package(nvdriver)
+if(nvdriver_FOUND)
+  target_compile_definitions(darknet PRIVATE GPU)
+endif()
 target_include_directories(darknet PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(darknet PRIVATE ${OpenCV_INCLUDE_DIRS})
-target_link_libraries(darknet PRIVATE ${OpenCV_LIBS})
+#find_package(OpenCV REQUIRED)
+#target_include_directories(darknet PRIVATE ${OpenCV_INCLUDE_DIRS})
+#target_link_libraries(darknet PRIVATE ${OpenCV_LIBS})
 target_link_libraries(darknet PRIVATE m)
 target_link_libraries(darknet PRIVATE pthread)
