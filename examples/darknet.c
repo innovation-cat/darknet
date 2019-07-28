@@ -416,7 +416,7 @@ int main(int argc, char **argv)
 #ifndef GPU
     gpu_index = -1;
 #else
-    if(gpu_num() < 0) {
+    if(gpu_num() <= 0) {
        gpu_index = -1;
     }
     if(gpu_index >= 0){
