@@ -1,3 +1,5 @@
+#define _GNU_SOURCE         /* See feature_test_macros(7) */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -219,7 +221,7 @@ void find_replace(char *str, char *orig, char *rep, char *output)
     char *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    if(!(p = strcasestr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
         return;
     }
