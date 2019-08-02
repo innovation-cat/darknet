@@ -49,7 +49,7 @@ endif
 ifeq ($(GPU), 1)
 output=$(shell nvidia-smi -L)
 
-ifeq ($(findstring GPU,$(output)) ,"GPU")
+ifeq ($(findstring GPU,$(output)) ,GPU)
 $(warning "nvidia-smi detected")
 else
 override GPU=0
