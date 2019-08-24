@@ -1,6 +1,6 @@
 classes= 20
 train  = /data/pascal_voc/train.txt
-valid  = /data/pascal_voc/2007_test.txt
+valid  =  /data/pascal_voc/2007_test.txt
 names = data/voc.names
 backup = backup
 
