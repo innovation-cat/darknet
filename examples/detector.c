@@ -9,11 +9,10 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
     char *train_images = option_find_str(options, "train", "data/train.list");
     char *backup_directory = option_find_str(options, "backup", "/backup/");
 
-    srand(time(0));
     char *base = basecfg(cfgfile);
     printf("%s\n", base);
     float avg_loss = -1;
-    network **nets = calloc(ngpus, sizeof(network));
+    network **nets = calloc(ngpus, sizeof(network*));
 
     srand(time(0));
     int seed = rand();
@@ -56,7 +55,6 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
     args.threads = 64;
 
     pthread_t load_thread = load_data(args);
-    double time;
     int count = 0;
     //while(i*imgs < N*120){
     //while(get_current_batch(net) < net->max_batches){
@@ -82,7 +80,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
             }
             net = nets[0];
         }
-        time=what_time_is_it_now();
+        double time=what_time_is_it_now();
         pthread_join(load_thread, 0);
         train = buffer;
         load_thread = load_data(args);
@@ -577,7 +575,6 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
     network *net = load_network(cfgfile, weightfile, 0);
     set_batch_network(net, 1);
     srand(2222222);
-    double time;
     char buff[256];
     char *input = buff;
     float nms=.45;
@@ -601,7 +598,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
 
 
         float *X = sized.data;
-        time=what_time_is_it_now();
+        double time=what_time_is_it_now();
         network_predict(net, X);
         printf("%s: Predicted in %f seconds.\n", input, what_time_is_it_now()-time);
         int nboxes = 0;
