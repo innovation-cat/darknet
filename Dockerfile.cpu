@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
-RUN apt-get update \
- && apt-get install --no-install-recommends -y gcc build-essential
+RUN http_proxy=http://172.16.153.103:3128 apt-get update \
+ && http_proxy=http://172.16.153.103:3128 apt-get install --no-install-recommends -y gcc build-essential cmake wget software-properties-common
 RUN mkdir -p /opt/darknet
 RUN mkdir -p /opt/bin
 COPY . /opt/darknet
